@@ -43,6 +43,7 @@ const CreatePost = () => {
     const formData = new FormData();
     formData.append("caption", caption);
     formData.append("post", imagePost);
+    formData.append("category", "post");
     try {
       const res = await axiosAuth.post("/post", formData, {
         headers: {
