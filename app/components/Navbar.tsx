@@ -27,7 +27,7 @@ const Navbar = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setImageProfile(res.data.data.profile.image_profile);
+        setImageProfile(res.data.data?.profile?.image_profile);
       };
       fethData();
     }
