@@ -32,7 +32,7 @@ const HomePage = () => {
 
   return (
     <section className="text-white" id="home">
-      {post.map((post) => (
+      {post?.map((post) => (
         <FeedCard key={post._id} data={post} token={token} />
       ))}
     </section>
