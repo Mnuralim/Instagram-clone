@@ -18,9 +18,10 @@ import DateConv from "./DateConv";
 type FeedCardProps = {
   data: Post;
   token: string | undefined;
+  setlikeState: any;
 };
 
-const FeedCard: React.FC<FeedCardProps> = ({ data, token }) => {
+const FeedCard: React.FC<FeedCardProps> = ({ data, token, setlikeState }) => {
   const [showLikeList, setShowLikeList] = useState<boolean>(false);
   const [captionText, setCaptionText] = useState<string>("");
   const [showButtonMore, setShowButtonMore] = useState<boolean>(true);
@@ -113,13 +114,14 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token }) => {
         },
       });
 
-      const numberOfLike = await axiosAuth.get(`/post/total-likes/${data._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // const numberOfLike = await axiosAuth.get(`/post/total-likes/${data._id}`, {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
       setAlreadyLiked(dataLike.data.data);
-      setTotalLikes(numberOfLike.data.data);
+      // setTotalLikes(numberOfLike.data.data);
+      setlikeState((prev: boolean) => !prev);
     } catch (error) {
       throw new Error("Error");
     }
@@ -160,7 +162,7 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token }) => {
           <VscBookmark className="text-white text-2xl" />
         </div>
         <button onClick={handleOpenListLikes} className="text-sm font-semibold px-3">
-          {totalLikes} Likes
+          {data.total_likes} Likes
         </button>
         <div className="px-3">
           <Link href={`/${data.user_id.username}`} className="font-semibold text-sm inline-block pr-1">
