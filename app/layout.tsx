@@ -4,6 +4,9 @@ import { Inter } from "next/font/google";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import Provider from "./Provider";
+import { TokenContextProvider } from "./context/token";
+import { PostContextProvider } from "./context/post";
+import { UserContextProvider } from "./context/my-profile";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +20,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${inter.className} bg-black text-white`}>
         <Provider>
-          <Header />
-          {children}
-          <Navbar />
+          <TokenContextProvider>
+            <UserContextProvider>
+              <PostContextProvider>
+                <Header />
+                {children}
+                <Navbar />
+              </PostContextProvider>
+            </UserContextProvider>
+          </TokenContextProvider>
         </Provider>
       </body>
     </html>

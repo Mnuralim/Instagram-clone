@@ -4,8 +4,9 @@ import { IoIosArrowBack } from "@react-icons/all-files/io/IoIosArrowBack";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { axiosAuth } from "@/lib/axios";
-import { useSession } from "next-auth/react";
 import Loading from "@/app/loading";
+import { useTokenContext } from "@/app/context/token";
+import { useUserContext } from "@/app/context/my-profile";
 
 const EditProfile = () => {
   const [image, setImage] = useState<string | ArrayBuffer | null>("");
@@ -18,33 +19,17 @@ const EditProfile = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.replace("/login");
-    },
-  });
-  console.log({ name, username, imageProfile, link, bio });
 
-  const token = session?.user.token;
+  const { token } = useTokenContext();
+  const { users } = useUserContext();
 
   useEffect(() => {
-    if (token) {
-      const fetchImage = async () => {
-        const res = await axiosAuth.get("/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPrevImage(res.data?.data?.profile?.image_profile);
-        setUsername(res.data?.data?.username);
-        setName(res.data?.data?.profile?.full_name);
-        setBio(res.data?.data?.profile?.bio);
-        setLink(res.data?.data?.profile?.link);
-      };
-      fetchImage();
-    }
-  }, [token]);
+    setPrevImage(users.profile.image_profile);
+    setUsername(users.username);
+    setName(users.profile.full_name);
+    setBio(users.profile.bio);
+    setLink(users.profile.link);
+  }, [users]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -87,7 +72,7 @@ const EditProfile = () => {
   };
 
   return (
-    <section className="text-white relative">
+    <section className="text-white relative bg-black">
       {loading ? <Loading /> : ""}
       <button onClick={() => router.back()} className="absolute top-4 left-2">
         <IoIosArrowBack className="text-2xl font-semibold" />
