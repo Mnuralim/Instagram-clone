@@ -34,9 +34,6 @@ const Login = () => {
       throw new Error("error");
     }
   };
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <section className="flex justify-between flex-col items-center h-screen">
@@ -53,7 +50,7 @@ const Login = () => {
             <input type="password" name="password" id="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full bg-[#262626] py-3 px-3 outline-none rounded-md" />
           </div>
           <button type="submit" className="text-white bg-blue-500 py-3 rounded-md">
-            Log in
+            {loading ? "Log in..." : "Log in"}
           </button>
         </form>
         <p className="text-sm text-center text-[#A8A8A8]">
