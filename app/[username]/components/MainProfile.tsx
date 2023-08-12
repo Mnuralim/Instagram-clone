@@ -98,8 +98,8 @@ const MainProfile = () => {
       </div>
 
       <div className="flex items-center justify-between gap-3 flex-wrap w-full mt-5 px-3">
-        <div className="w-16 h-16 ">
-          <Image src={users?.profile?.image_profile} alt={users?.username || "profile"} width={70} height={70} className="object-center rounded-full" />
+        <div className="rounded-full w-16 h-16 overflow-hidden">
+          <Image src={users?.profile?.image_profile} alt={users?.username || "profile"} width={64} height={64} className="object-center rounded-full" />
         </div>
         <div className="flex gap-8">
           <div className="text-center">
