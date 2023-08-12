@@ -5,13 +5,16 @@ import Link from "next/link";
 import { BsFacebook } from "react-icons/bs";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Loading from "../loading";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const data = await signIn("credentials", {
@@ -21,14 +24,19 @@ const Login = () => {
       });
       console.log(data);
       if (data?.ok) {
+        setLoading(false);
         router.push("/");
       } else {
+        setLoading(false);
         router.push("/login");
       }
     } catch (error) {
       throw new Error("error");
     }
   };
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="flex justify-between flex-col items-center h-screen">
