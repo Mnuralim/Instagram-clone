@@ -23,7 +23,7 @@ const Header = () => {
     } else {
       setShowHeader(true);
     }
-  }, []);
+  }, [path]);
 
   return showHeader ? (
     <section className="flex py-[10px] justify-between items-center px-3 fixed top-0 w-full bg-black z-[100]">
