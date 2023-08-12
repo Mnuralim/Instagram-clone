@@ -1,5 +1,5 @@
 "use client";
-import { usePostContext } from "@/app/context/post";
+import { usePostContext } from "@/app/context/all-post";
 
 import Image from "next/image";
 import Link from "next/link";

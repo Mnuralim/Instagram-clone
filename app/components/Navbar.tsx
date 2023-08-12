@@ -8,30 +8,13 @@ import { MdGridOn } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { axiosAuth } from "@/lib/axios";
+import { useUserContext } from "../context/my-profile";
 
 const Navbar = () => {
   const [showNav, setShowNav] = useState(true);
-  const [imageProfile, setImageProfile] = useState<string>("");
   const [showUploadOption, setShowUploadOption] = useState<boolean>(false);
   const path = usePathname();
-  const { data: session } = useSession();
-  const token = session?.user.token;
-
-  useEffect(() => {
-    if (token) {
-      const fethData = async () => {
-        const res = await axiosAuth.get("/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setImageProfile(res.data.data?.profile?.image_profile);
-      };
-      fethData();
-    }
-  });
+  const { users } = useUserContext();
 
   useEffect(() => {
     setShowNav(path?.includes("/p/") || path?.startsWith("/create") || path?.startsWith("/login") || path?.startsWith("/register") || path?.startsWith("/accounts") ? false : true);
@@ -64,9 +47,9 @@ const Navbar = () => {
       <Link href={"/reels"}>{path == "/reels" ? <img src="/image/instagram-reel (1).svg" alt="" className="white-logo" /> : <img src="/image/instagram-reel.svg" alt="" className="" />}</Link>
       <Link href={"/profile"}>
         {path == "/profile" ? (
-          <Image src={imageProfile} alt="profile" width={100} height={100} className="object-cover w-7 h-7 rounded-full border-2" />
+          <Image src={users && users?.profile?.image_profile} alt="profile" width={100} height={100} className="object-cover w-7 h-7 rounded-full border-2" />
         ) : (
-          <Image src={imageProfile} alt="profile" width={100} height={100} className="object-cover w-7 h-7 rounded-full border-2 border-transparent" />
+          <Image src={users && users?.profile?.image_profile} alt="profile" width={100} height={100} className="object-cover w-7 h-7 rounded-full border-2 border-transparent" />
         )}
       </Link>
     </nav>

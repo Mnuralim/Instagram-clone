@@ -12,6 +12,9 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { axiosAuth } from "@/lib/axios";
+import { useOtherUserContext } from "@/app/context/other-profile";
+import { useTokenContext } from "@/app/context/token";
+import { useUserContext } from "@/app/context/my-profile";
 
 const MainProfile = () => {
   const [showMainProfile, setShowMainProfile] = useState<boolean>(true);
@@ -21,45 +24,27 @@ const MainProfile = () => {
   const path = usePathname();
   const router = useRouter();
   const params = useParams();
+  const username = params?.username as string;
 
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      return router.replace("/login");
-    },
-  });
-  const token = session?.user.token;
-
-  const imageUrl = profile?.profile.image_profile || "https://res.cloudinary.com/dcwaptlnd/image/upload/v1690374479/download_iny32w.png";
+  const { users, setusername } = useOtherUserContext();
+  const { users: user } = useUserContext();
+  const { token } = useTokenContext();
 
   useEffect(() => {
-    if (token) {
-      const fethData = async () => {
-        const res = await axiosAuth.get(`/user/${params?.username}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setProfile(res.data.data);
-      };
-      fethData();
-    }
-  }, [token, params?.username]);
-
-  useEffect(() => {
-    if (path?.startsWith(`/${params?.username}/${params?.id}`)) {
+    setusername(username);
+    if (path?.startsWith(`/${username}/${params?.id}`)) {
       setShowMainProfile(false);
     } else if (path?.startsWith(`/profile/edit/`)) {
       setShowMainProfile(false);
     } else {
       setShowMainProfile(true);
     }
-  }, [path, setShowMainProfile, params?.id, params?.username]);
+  }, [path, setShowMainProfile, params?.id, username, setusername]);
 
   useEffect(() => {
     if (token) {
       const fethData = async () => {
-        const res = await axiosAuth.get(`/user/follow/${params?.username}`, {
+        const res = await axiosAuth.get(`/user/follow/${username}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -72,13 +57,13 @@ const MainProfile = () => {
 
   useEffect(() => {
     if (token) {
-      if (session.user.username == params?.username) {
+      if (user.username == params?.username) {
         setShowMyProfile(true);
       } else {
         setShowMyProfile(false);
       }
     }
-  }, [token, session, params?.username]);
+  }, [token, params?.username, user.username]);
 
   const handleFollow = async () => {
     try {
@@ -112,7 +97,7 @@ const MainProfile = () => {
           <button onClick={() => router.back()}>
             <IoIosArrowBack className="text-2xl font-semibold" />
           </button>
-          <h1 className="font-semibold text-2xl">{profile?.username}</h1>
+          <h1 className="font-semibold text-2xl">{users?.username}</h1>
         </div>
         <div className="flex justify-center items-center gap-5">
           <FiBell className="text-white text-2xl" />
@@ -122,34 +107,34 @@ const MainProfile = () => {
 
       <div className="flex items-center gap-16 w-full mt-5  px-3 ">
         <div className="rounded-full w-16 h-16 relative overflow-hidden">
-          <Image src={imageUrl} alt={profile?.username || "profile"} width={70} height={70} className="object-cover w-full h-full" />
+          <Image src={users?.profile?.image_profile} alt={users?.username || "profile"} width={70} height={70} className="object-cover w-full h-full" />
         </div>
         <div className="flex gap-8">
           <div className="text-center">
-            <h3 className="font-bold text-lg">{profile?.total_post}</h3>
+            <h3 className="font-bold text-lg">{users?.total_post}</h3>
             <p>Posts</p>
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-lg">{profile?.total_followers}</h3>
+            <h3 className="font-bold text-lg">{users?.total_followers}</h3>
             <p>Followers</p>
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-lg">{profile?.total_following}</h3>
+            <h3 className="font-bold text-lg">{users?.total_following}</h3>
             <p>Following</p>
           </div>
         </div>
       </div>
 
       <div className="mt-1 px-3">
-        <h2 className="font-semibold">{profile?.username}</h2>
-        <p className="text-sm">{profile?.profile.bio}</p>
-        <Link href={profile?.profile.link || "/"} target="_blank" className="text-sm text-[#E0F1FF]">
-          <AiOutlineLink className="inline text-lg" /> {profile?.profile.link}
+        <h2 className="font-semibold">{users?.username}</h2>
+        <p className="text-sm">{users?.profile?.bio}</p>
+        <Link href={users?.profile?.link || "/"} target="_blank" className="text-sm text-[#E0F1FF]">
+          <AiOutlineLink className="inline text-lg" /> {users?.profile?.link}
         </Link>
       </div>
       {showMyProfile ? (
         <div className="flex items-center gap-1 my-3 px-3">
-          <Link href={`/profile/edit/${profile?.username}`} className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">
+          <Link href={`/profile/edit/${users?.username}`} className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">
             Edit profile
           </Link>
           <button className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">Share profile</button>

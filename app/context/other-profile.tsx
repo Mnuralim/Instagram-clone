@@ -4,25 +4,30 @@ import { axiosAuth } from "@/lib/axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useTokenContext } from "./token";
 
-interface UserContextProps {
+interface OtherOtherUserContextProps {
   users: User;
   triger: boolean;
+  username: string;
+  setusername: React.Dispatch<React.SetStateAction<string>>;
   settriger: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const UserContext = createContext<UserContextProps>({
+const OtherUserContext = createContext<OtherOtherUserContextProps>({
   users: {} as User,
   triger: false,
+  username: "",
   settriger: () => {},
+  setusername: () => {},
 });
 
-export const UserContextProvider = ({ children }: any) => {
+export const OtherUserContextProvider = ({ children }: any) => {
   const [users, setUsers] = useState<User>({} as User);
   const [triger, settriger] = useState<boolean>(false);
+  const [username, setusername] = useState<string>("");
   const { token } = useTokenContext();
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axiosAuth("/user/profile", {
+      const res = await axiosAuth(`/user/${username}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,14 +37,16 @@ export const UserContextProvider = ({ children }: any) => {
     if (token) {
       fetchData();
     }
-  }, [token, triger]);
-  const contextValue: UserContextProps = {
+  }, [token, triger, username]);
+  const contextValue: OtherOtherUserContextProps = {
     users,
     triger,
     settriger,
+    setusername,
+    username,
   };
 
-  return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
+  return <OtherUserContext.Provider value={contextValue}>{children}</OtherUserContext.Provider>;
 };
 
-export const useUserContext = () => useContext(UserContext);
+export const useOtherUserContext = () => useContext(OtherUserContext);

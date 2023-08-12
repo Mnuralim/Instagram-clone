@@ -37,7 +37,7 @@ const MainProfile = () => {
     <section className="flex flex-col pt-[10px] text-white bg-black z-[999] relative">
       <div className="w-full justify-between items-center flex px-3">
         <div>
-          <h1 className="font-semibold text-2xl">{users.username}</h1>
+          <h1 className="font-semibold text-2xl">{users?.username}</h1>
         </div>
         <div className="flex justify-center items-center gap-5">
           <PlusSquareOutlined className="text-white text-2xl" />
@@ -49,34 +49,34 @@ const MainProfile = () => {
 
       <div className="flex items-center justify-between gap-12 w-full mt-5  px-3 ">
         <div className="rounded-full w-16 h-16 relative overflow-hidden">
-          <Image src={users?.profile.image_profile} alt="profile" width={64} height={64} className="object-cover w-[64px] h-[64px] rounded-full" />
+          <Image src={users?.profile?.image_profile} alt="profile" width={64} height={64} className="object-cover w-[64px] h-[64px] rounded-full" />
         </div>
         <div className="flex gap-8">
           <div className="text-center">
-            <h3 className="font-bold text-lg">{users.total_post}</h3>
+            <h3 className="font-bold text-lg">{users?.total_post}</h3>
             <p>Posts</p>
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-lg">{users.total_followers}</h3>
+            <h3 className="font-bold text-lg">{users?.total_followers}</h3>
             <p>Followers</p>
           </div>
           <div className="text-center">
-            <h3 className="font-bold text-lg">{users.total_following}</h3>
+            <h3 className="font-bold text-lg">{users?.total_following}</h3>
             <p>Following</p>
           </div>
         </div>
       </div>
 
       <div className="mt-1 px-3">
-        <h2 className="font-semibold">{users.profile.full_name}</h2>
-        <p className="text-sm">{users.profile.bio}</p>
-        <Link href={users.profile.link || "/"} target="_blank" className="text-sm text-[#E0F1FF]">
-          <AiOutlineLink className="inline text-lg" /> {users.profile.link}
+        <h2 className="font-semibold">{users?.profile?.full_name}</h2>
+        <p className="text-sm">{users?.profile?.bio}</p>
+        <Link href={users?.profile?.link || "/"} target="_blank" className="text-sm text-[#E0F1FF]">
+          <AiOutlineLink className="inline text-lg" /> {users?.profile?.link}
         </Link>
       </div>
 
       <div className="flex items-center gap-1 my-3 px-3">
-        <Link href={`/profile/edit/${users.username}`} className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">
+        <Link href={`/profile/edit/${users?.username}`} className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">
           Edit profile
         </Link>
         <button className="bg-[#262626] py-1 w-[45%] text-center rounded-lg font-semibold">Share profile</button>

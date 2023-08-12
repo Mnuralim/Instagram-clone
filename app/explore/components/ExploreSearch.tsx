@@ -34,8 +34,7 @@ const ExploreSearch = () => {
   if (!data) {
     return <Loading />;
   }
-  const filteredData = data.filter((d) => d.username.toLowerCase().includes(username.toLowerCase()));
-  console.log(username);
+  const filteredData = data.filter((d) => d.username.toLowerCase().includes(username.toLowerCase())).slice(0, 5);
   return (
     <section className="text-white fixed top-0 z-[9999] bg-black py-[10px] w-full">
       <div className="flex items-center justify-between px-3 gap-2">

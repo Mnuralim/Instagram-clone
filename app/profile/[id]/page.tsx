@@ -16,6 +16,7 @@ type Params = {
 const SinglePost: React.FC<Params> = ({ params }) => {
   const [postData, setPostdata] = useState<Post | any>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [postTriger, setpostTriger] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const { data: session } = useSession();
   const token = session?.user.token;
@@ -38,7 +39,7 @@ const SinglePost: React.FC<Params> = ({ params }) => {
       };
       fetchData();
     }
-  }, [token, params.id]);
+  }, [token, params.id, postTriger]);
   console.log({ params: params.id, postData, token });
 
   if (isLoading) {
@@ -58,7 +59,7 @@ const SinglePost: React.FC<Params> = ({ params }) => {
         <p></p>
       </div>
       {/* <FeedCard data={post} token={token} /> */}
-      <FeedCard data={postData} token={token} />
+      <FeedCard data={postData} token={token} setpostTriger={setpostTriger} />
     </div>
   );
 };

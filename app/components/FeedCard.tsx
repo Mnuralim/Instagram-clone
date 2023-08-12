@@ -11,17 +11,16 @@ import { BsDot } from "@react-icons/all-files/bs/BsDot";
 import Link from "next/link";
 import ListLikes from "./Likes";
 import { axiosAuth } from "@/lib/axios";
-import { useSession } from "next-auth/react";
 import DateConv from "./DateConv";
 // import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
 type FeedCardProps = {
   data: Post;
   token: string | undefined;
-  setlikeState: any;
+  setpostTriger: any;
 };
 
-const FeedCard: React.FC<FeedCardProps> = ({ data, token, setlikeState }) => {
+const FeedCard: React.FC<FeedCardProps> = ({ data, token, setpostTriger }) => {
   const [showLikeList, setShowLikeList] = useState<boolean>(false);
   const [captionText, setCaptionText] = useState<string>("");
   const [showButtonMore, setShowButtonMore] = useState<boolean>(true);
@@ -112,7 +111,7 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token, setlikeState }) => {
       });
 
       setAlreadyLiked(dataLike.data.data);
-      setlikeState((prev: boolean) => !prev);
+      setpostTriger((prev: boolean) => !prev);
     } catch (error) {
       throw new Error("Error");
     }

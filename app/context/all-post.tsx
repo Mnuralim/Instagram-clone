@@ -6,18 +6,18 @@ import { useTokenContext } from "./token";
 
 interface PostContextProps {
   posts: Post[];
-  totalLikeState: boolean;
-  setTotalLikeState: React.Dispatch<React.SetStateAction<boolean>>;
+  postTriger: boolean;
+  setpostTriger: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const PostContext = createContext<PostContextProps>({
   posts: [],
-  totalLikeState: false,
-  setTotalLikeState: () => {},
+  postTriger: false,
+  setpostTriger: () => {},
 });
 
 export const PostContextProvider = ({ children }: any) => {
   const [posts, setPost] = useState<Post[]>([]);
-  const [totalLikeState, setTotalLikeState] = useState<boolean>(false);
+  const [postTriger, setpostTriger] = useState<boolean>(false);
   const { token } = useTokenContext();
 
   useEffect(() => {
@@ -32,13 +32,13 @@ export const PostContextProvider = ({ children }: any) => {
     if (token) {
       fetchData();
     }
-  }, [token, totalLikeState]);
+  }, [token, postTriger]);
   const contextValue: PostContextProps = {
     posts,
-    totalLikeState,
-    setTotalLikeState,
+    postTriger,
+    setpostTriger,
   };
-  console.log(totalLikeState);
+  console.log(postTriger);
 
   return <PostContext.Provider value={contextValue}>{children}</PostContext.Provider>;
 };

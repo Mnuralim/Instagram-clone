@@ -5,9 +5,11 @@ import { MdCloudUpload } from "@react-icons/all-files/md/MdCloudUpload";
 import Link from "next/link";
 import Image from "next/image";
 import { axiosAuth } from "@/lib/axios";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Loading from "../../loading";
+import { useTokenContext } from "@/app/context/token";
+import { useUserContext } from "@/app/context/my-profile";
+import { usePostContext } from "@/app/context/all-post";
 
 const CreatePost = () => {
   const [image, setImage] = useState<string | ArrayBuffer | null>(null);
@@ -17,13 +19,9 @@ const CreatePost = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { data: session } = useSession({
-    required: true,
-    onUnauthenticated() {
-      return router.replace("/login");
-    },
-  });
-  const token = session?.user.token;
+  const { token } = useTokenContext();
+  const { users } = useUserContext();
+  const { setpostTriger } = usePostContext();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,6 +50,7 @@ const CreatePost = () => {
         },
       });
       if (res.status == 200) {
+        setpostTriger((prev) => !prev);
         setLoading(false);
         router.push("/");
       } else {
@@ -61,20 +60,6 @@ const CreatePost = () => {
       throw new Error("error");
     }
   };
-
-  useEffect(() => {
-    if (token) {
-      const fetchData = async () => {
-        const res = await axiosAuth.get("/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setImageProfile(res.data.data?.profile?.image_profile);
-      };
-      fetchData();
-    }
-  }, [token]);
 
   return (
     <section className="text-white">
@@ -90,7 +75,7 @@ const CreatePost = () => {
           </button>
         </div>
         <div className=" flex justify-between items-center  gap-3 w-full px-3 py-4 mt-4">
-          <Image src={imageProfile} alt={"test"} width={100} height={100} className="object-cover rounded-full bg-blue-400 w-8 h-8" />
+          <Image src={users && users?.profile?.image_profile} alt={"test"} width={100} height={100} className="object-cover rounded-full bg-blue-400 w-8 h-8" />
           <div className="w-full items-center flex">
             <div className="w-full">
               <input type="text" placeholder="Write a caption..." className="w-full outline-none  py-1 bg-transparent text-sm" value={caption} onChange={(e) => setCaption(e.target.value)} />

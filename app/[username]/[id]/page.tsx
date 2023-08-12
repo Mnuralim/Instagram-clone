@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { axiosAuth } from "@/lib/axios";
 import FeedCard from "@/app/components/FeedCard";
@@ -18,6 +17,7 @@ const SinglePost: React.FC<Params> = ({ params }) => {
   const [postData, setPostdata] = useState<Post | any>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
+  const [postTriger, setpostTriger] = useState<boolean>(false);
   const { data: session } = useSession();
   const token = session?.user.token;
   const router = useRouter();
@@ -40,7 +40,7 @@ const SinglePost: React.FC<Params> = ({ params }) => {
       };
       fetchData();
     }
-  }, [token, params.id]);
+  }, [token, params.id, postTriger]);
 
   if (isLoading) {
     return <Loading />;
@@ -58,8 +58,7 @@ const SinglePost: React.FC<Params> = ({ params }) => {
         <h2 className=" font-semibold ">Posts</h2>
         <p></p>
       </div>
-      {/* <FeedCard data={post} token={token} /> */}
-      <FeedCard data={postData} token={token} />
+      <FeedCard data={postData} token={token} setpostTriger={setpostTriger} />
     </div>
   );
 };

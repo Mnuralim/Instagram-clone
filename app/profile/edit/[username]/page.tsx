@@ -21,7 +21,7 @@ const EditProfile = () => {
   const router = useRouter();
 
   const { token } = useTokenContext();
-  const { users } = useUserContext();
+  const { users, settriger } = useUserContext();
 
   useEffect(() => {
     setPrevImage(users.profile.image_profile);
@@ -60,6 +60,7 @@ const EditProfile = () => {
         },
       });
       if (res.status == 201) {
+        settriger((prev) => !prev);
         setLoading(false);
         router.push("/profile");
       } else {
