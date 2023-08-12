@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { axiosAuth } from "@/lib/axios";
 import DateConv from "@/app/components/DateConv";
+import Loading from "@/app/loading";
 
 // import useAxiosAuth from "@/lib/hooks/useAxiosAuth";
 
@@ -19,6 +20,7 @@ type Params = {
 const IdPost: React.FC<Params> = ({ params }) => {
   const [commentLists, setCommentLists] = useState<Comments[] | []>([]);
   const [comment, setComment] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [postUser, setPostUser] = useState<string>("");
   const router = useRouter();
 
@@ -61,6 +63,7 @@ const IdPost: React.FC<Params> = ({ params }) => {
 
   const handleSumbit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const data = await axiosAuth.post(
         `/comment/${params.idPost}`,
@@ -75,6 +78,7 @@ const IdPost: React.FC<Params> = ({ params }) => {
       );
       if (data.status == 200) {
         setComment("");
+        setLoading(false);
         const getComments = await axiosAuth.get(`/comment/${params.idPost}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -84,12 +88,16 @@ const IdPost: React.FC<Params> = ({ params }) => {
         setCommentLists(getComments.data.data);
         router.refresh();
       } else {
+        setLoading(false);
         alert("error");
       }
     } catch (error) {
       alert("Internal srver error");
     }
   };
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <section className="bg-[#262626] relative z-[999999999] min-h-screen">
       <div className="flex justify-between items-center pt-4 px-3">
