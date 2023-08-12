@@ -10,7 +10,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { axiosAuth } from "@/lib/axios";
 import { useOtherUserContext } from "@/app/context/other-profile";
 import { useTokenContext } from "@/app/context/token";
@@ -18,7 +17,6 @@ import { useUserContext } from "@/app/context/my-profile";
 
 const MainProfile = () => {
   const [showMainProfile, setShowMainProfile] = useState<boolean>(true);
-  const [profile, setProfile] = useState<User | null>();
   const [buttonFollow, setButtonFollow] = useState<boolean>(false);
   const [showMyProfile, setShowMyProfile] = useState<boolean>(false);
   const path = usePathname();
@@ -26,7 +24,7 @@ const MainProfile = () => {
   const params = useParams();
   const username = params?.username as string;
 
-  const { users, setusername } = useOtherUserContext();
+  const { users, setusername, settriger } = useOtherUserContext();
   const { users: user } = useUserContext();
   const { token } = useTokenContext();
 
@@ -53,7 +51,7 @@ const MainProfile = () => {
       };
       fethData();
     }
-  });
+  }, [buttonFollow, username, token]);
 
   useEffect(() => {
     if (token) {
@@ -77,14 +75,8 @@ const MainProfile = () => {
         }
       );
 
-      const getData = await axiosAuth.get(`/user/${params?.username}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setProfile(getData.data.data);
-      setButtonFollow(res.data.data);
+      settriger((prev) => !prev);
+      setButtonFollow(!buttonFollow);
     } catch (error) {
       throw new Error("Error");
     }
@@ -105,9 +97,9 @@ const MainProfile = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-16 w-full mt-5  px-3 ">
-        <div className="rounded-full w-16 h-16 relative overflow-hidden">
-          <Image src={users?.profile?.image_profile} alt={users?.username || "profile"} width={70} height={70} className="object-cover w-full h-full" />
+      <div className="flex items-center justify-between gap-3 flex-wrap w-full mt-5 px-3">
+        <div className="w-16 h-16 ">
+          <Image src={users?.profile?.image_profile} alt={users?.username || "profile"} width={70} height={70} className="object-center rounded-full" />
         </div>
         <div className="flex gap-8">
           <div className="text-center">

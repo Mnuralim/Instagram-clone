@@ -9,10 +9,9 @@ import { BsPersonCheck } from "@react-icons/all-files/bs/BsPersonCheck";
 import { AiOutlineLink } from "react-icons/ai";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { axiosAuth } from "@/lib/axios";
 import { useUserContext } from "@/app/context/my-profile";
 
 const MainProfile = () => {
@@ -47,9 +46,9 @@ const MainProfile = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-12 w-full mt-5  px-3 ">
-        <div className="rounded-full w-16 h-16 relative overflow-hidden">
-          <Image src={users?.profile?.image_profile} alt="profile" width={64} height={64} className="object-cover w-[64px] h-[64px] rounded-full" />
+      <div className="flex items-center flex-wrap justify-between gap-3 w-full mt-5  px-3 ">
+        <div className="rounded-full w-16 h-16 overflow-hidden">
+          <Image src={users?.profile?.image_profile} alt="profile" width={64} height={64} className="object-center rounded-full" />
         </div>
         <div className="flex gap-8">
           <div className="text-center">

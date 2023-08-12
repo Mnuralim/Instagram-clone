@@ -25,7 +25,6 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token, setpostTriger }) => {
   const [captionText, setCaptionText] = useState<string>("");
   const [showButtonMore, setShowButtonMore] = useState<boolean>(true);
   const [alreadyLiked, setAlreadyLiked] = useState<boolean>(false);
-  const [totalLikes, setTotalLikes] = useState<number>(0);
 
   const caption = data?.caption;
   const maxCaptionNumber = caption?.split(" ");
@@ -79,20 +78,6 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token, setpostTriger }) => {
 
   //total likes
 
-  useEffect(() => {
-    if (token) {
-      const fetchDataLiked = async () => {
-        const res = await axiosAuth.get(`/post/total-likes/${data._id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setTotalLikes(res.data.data);
-      };
-      fetchDataLiked();
-    }
-  }, [data._id, token]);
-
   const handleLikeAndDislike = async () => {
     try {
       await axiosAuth.put(
@@ -104,6 +89,8 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token, setpostTriger }) => {
           },
         }
       );
+      setpostTriger((prev: boolean) => !prev);
+
       const dataLike = await axiosAuth.get(`/post/likes/${data._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -111,7 +98,6 @@ const FeedCard: React.FC<FeedCardProps> = ({ data, token, setpostTriger }) => {
       });
 
       setAlreadyLiked(dataLike.data.data);
-      setpostTriger((prev: boolean) => !prev);
     } catch (error) {
       throw new Error("Error");
     }
