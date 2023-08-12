@@ -137,7 +137,9 @@ const IdPost: React.FC<Params> = ({ params }) => {
         ))}
       </div>
       <div className="fixed flex justify-between items-center bottom-0 gap-3 w-full px-3 py-1 bg-[#262626]">
-        <Image src={imageProfile} alt={"profile"} width={100} height={100} className="object-cover rounded-full bg-blue-400 w-10 h-10" />
+        <div className="rounded-full w-10 h-10 overflow-hidden">
+          <Image src={imageProfile} alt={"profile"} width={40} height={40} className="object-fill rounded-full" />
+        </div>
         <form onSubmit={handleSumbit} className="w-full flex">
           <div className="w-full">
             <input type="text" placeholder={`Add a comment for ${postUser}...`} className="w-full outline-none  py-1 bg-transparent text-sm" value={comment} onChange={(e) => setComment(e.target.value)} />
