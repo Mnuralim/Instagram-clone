@@ -21,13 +21,15 @@ const Register = () => {
         email,
         password,
       });
+      console.log(res.status);
       if (res.status == 200) {
         router.push("/login");
       } else {
-        setMessage(res.data.data);
+        alert(res.data.message);
+        setMessage(res.data.message);
       }
-    } catch (error) {
-      throw new Error("Internal server error");
+    } catch (error: any) {
+      alert(error?.response.data.message);
     }
   };
 
@@ -39,7 +41,7 @@ const Register = () => {
           <p className="text-sm text-red-600">{message}</p>
         </center>
         <center>
-          <Image src={"/image/iglogo.png"} alt="logo" width={10300} height={1000} className="white-logo pt-1 object-cover w-[193px] h-[59px]" />
+          <Image src={"/image/iglogo.png"} alt="logo" width={10300} height={1000} className="white-logo pt-1 object-fill w-[193px] h-[59px]" />
         </center>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>

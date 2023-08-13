@@ -35,10 +35,10 @@ const nextAuthOptions: NextAuthOptions = {
             const responseData = data.data.data;
             return responseData;
           } else {
-            return null;
+            throw new Error("error");
           }
-        } catch (error) {
-          throw new Error("Error");
+        } catch (error: any) {
+          throw new Error(error.response.data.message);
         }
       },
     }),

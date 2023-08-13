@@ -5,7 +5,6 @@ import Link from "next/link";
 import { BsFacebook } from "react-icons/bs";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Loading from "../loading";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -22,12 +21,12 @@ const Login = () => {
         email,
         password,
       });
-      console.log(data);
       if (data?.ok) {
         setLoading(false);
         router.push("/");
       } else {
         setLoading(false);
+        alert(data?.error);
         router.push("/login");
       }
     } catch (error) {
@@ -40,7 +39,7 @@ const Login = () => {
       <div className="pt-3"></div>
       <div className="flex flex-col w-5/6 gap-3">
         <center>
-          <Image src={"/image/iglogo.png"} alt="logo" width={10300} height={1000} className="white-logo pt-1 object-cover w-[193px] h-[59px]" />
+          <Image src={"/image/iglogo.png"} alt="logo" width={10300} height={1000} className="white-logo pt-1 object-fill w-[193px] h-[59px]" />
         </center>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
