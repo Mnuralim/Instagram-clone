@@ -28,7 +28,7 @@ const Header = () => {
   return showHeader ? (
     <section className="flex py-[10px] justify-between items-center px-3 fixed top-0 w-full bg-black z-[100]">
       <Link href={"/"}>
-        <Image src={"/image/iglogo.png"} alt="logo" width={123} height={39} className="white-logo pt-1 object-cover w-[123px] h-[39px]" />
+        <Image src={"/image/iglogo.png"} alt="logo" width={123} height={39} className="white-logo pt-1 object-fill w-[123px] h-[39px]" />
       </Link>
       <div className="flex justify-center gap-5">
         <PlusSquareOutlined className="text-white text-2xl" />
