@@ -95,7 +95,7 @@ const EditProfile = () => {
                 <Image src={prevImage} alt={"test"} width={100} height={100} className="object-cover rounded-full bg-blue-400 w-16 h-16" />
               )}
             </label>
-            <input onChange={handleImageChange} type="file" name="postFile" id="postFile" className="hidden" />
+            <input onChange={handleImageChange} accept="image/*" type="file" name="postFile" id="postFile" className="hidden" />
             <label htmlFor="postFile" className="text-sm text-indigo-800 font-bold">
               Edit picture
             </label>

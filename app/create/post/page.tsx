@@ -84,7 +84,7 @@ const CreatePost = () => {
               <label htmlFor="postFile" className="">
                 {image ? <Image src={image.toString()} alt="" width={100} height={100} className="object-cover w-10 h-10" /> : <MdCloudUpload className="text-3xl text-blue-700" />}
               </label>
-              <input onChange={handleImageChange} type="file" name="postFile" id="postFile" className="hidden" />
+              <input onChange={handleImageChange} accept="image/*" type="file" name="postFile" id="postFile" className="hidden" />
             </div>
           </div>
         </div>
